@@ -7,20 +7,8 @@ def load_data(file_path):
 
 animals_data = load_data('animals_data.json')
 
-print(animals_data)
-
-for animal in animals_data:
-  print(f"name: {animal['name']}")
-  if 'diet' in animal['characteristics'].keys():
-    print(f"diet: {animal['characteristics']['diet']}")
-  if 'locations' in animal.keys():
-    print(f"location: {animal['locations'][0]}")
-  if 'type' in animal['characteristics'].keys():
-    print(f"type: {animal['characteristics']['type']}")
-  print()
-
-  output = ''  # define an empty string
-  for animal in animals_data:
+  def serialize_html(animal):
+    output = ''  # define an empty string
     output += '<li class="cards__item">'
     output += f"<div class='card__title'>{animal['name']}</div>\n"
     output += f"<p class='card__text'>\n"
@@ -32,7 +20,12 @@ for animal in animals_data:
       output += f"<strong>Type:</strong> {animal['characteristics']['type']}<br/>\n"
     output += "</p>"
     output += '</li>'
-  print(output)
+    return output
+  output = ''
+
+  for animal in animals_data:
+    output += serialize_html(animal)
+    print(output)
 
 
   def load_html(file_path):
