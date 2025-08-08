@@ -7,7 +7,7 @@ def load_data(file_path):
 
 animals_data = load_data('animals_data.json')
 
-  def serialize_html(animal):
+def serialize_html(animal):
     output = ''  # define an empty string
     output += '<li class="cards__item">'
     output += f"<div class='card__title'>{animal['name']}</div>\n"
@@ -21,23 +21,24 @@ animals_data = load_data('animals_data.json')
     output += "</p>"
     output += '</li>'
     return output
-  output = ''
 
-  for animal in animals_data:
-    output += serialize_html(animal)
-    print(output)
+output = ''
+
+for animal in animals_data:
+  output += serialize_html(animal)
+  print(output)
 
 
-  def load_html(file_path):
-    with open(file_path, "r") as handle:
-      return handle.read()
+def load_html(file_path):
+  with open(file_path, "r") as handle:
+    return handle.read()
 
-  def write_html(file_path, html):
-    with open(file_path, "w") as handle:
-      handle.write(html)
+def write_html(file_path, html):
+  with open(file_path, "w") as handle:
+    handle.write(html)
 
-  html_template = load_html('animals_template.html')
+html_template = load_html('animals_template.html')
 
-  html_animals = html_template.replace("__REPLACE_ANIMALS_INFO__", output)
+html_animals = html_template.replace("__REPLACE_ANIMALS_INFO__", output)
 
-  write_html('animals_web_output.html', html_animals)
+write_html('animals_web_output.html', html_animals)
