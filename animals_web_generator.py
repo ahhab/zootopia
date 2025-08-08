@@ -10,10 +10,11 @@ animals_data = load_data('animals_data.json')
 print(animals_data)
 
 for animal in animals_data:
-  print(animal['name'])
-  if 'diet' in animal.keys():
-    print(animal['diet'])
-  if 'location' in animal.keys():
-    print(animal['location'][0])
-  if 'type' in animal.keys():
-    print(animal['type'])
+  print(f"name: {animal['name']}")
+  if 'diet' in animal['characteristics'].keys():
+    print(f"diet: {animal['characteristics']['diet']}")
+  if 'locations' in animal.keys():
+    print(f"location: {animal['locations'][0]}")
+  if 'type' in animal['characteristics'].keys():
+    print(f"type: {animal['characteristics']['type']}")
+  print()
