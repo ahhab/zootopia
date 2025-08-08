@@ -18,3 +18,30 @@ for animal in animals_data:
   if 'type' in animal['characteristics'].keys():
     print(f"type: {animal['characteristics']['type']}")
   print()
+
+  output = ''  # define an empty string
+  for animal in animals_data:
+    # append information to each string
+    output += f"Name: {animal['name']}\n"
+    if 'diet' in animal['characteristics'].keys():
+      output += f"Diet: {animal['characteristics']['diet']}\n"
+    if 'locations' in animal.keys():
+      output += f"Location: {animal['locations'][0]}\n"
+    if 'type' in animal['characteristics'].keys():
+      output += f"Type: {animal['characteristics']['type']}\n"
+  print(output)
+
+
+  def load_html(file_path):
+    with open(file_path, "r") as handle:
+      return handle.read()
+
+  def write_html(file_path, html):
+    with open(file_path, "w") as handle:
+      handle.write(html)
+
+  html_template = load_html('animals_template.html')
+
+  html_animals = html_template.replace("__REPLACE_ANIMALS_INFO__", output)
+
+  write_html('animals_web_output.html', html_animals)
