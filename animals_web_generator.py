@@ -1,34 +1,6 @@
 import json
 import os
-import requests
-from dotenv import load_dotenv
-
-load_dotenv() # not to commit the api key, it is stored in .env and loaded here. 
-
-
-def get_animal_data(animal_name):
-    """
-    Fetches animal data from the API Ninjas API.
-
-    Args:
-        animal_name (str): The name of the animal to search for.
-
-    Returns:
-        list: A list of dictionaries containing animal data, or None if the request fails.
-    """
-    api_key = os.getenv("API_NINJAS_API_KEY")
-    if not api_key:
-        raise ValueError("API key not found. Please set the API_NINJAS_API_KEY environment variable.")
-
-    api_url = f'https://api.api-ninjas.com/v1/animals?name={animal_name}'
-    response = requests.get(api_url, headers={'X-Api-Key': api_key})
-
-    if response.status_code == requests.codes.ok:
-        return response.json()
-    else:
-        print(f"Error: {response.status_code} {response.text}")
-        return None
-
+import data_fetcher
 
 def serialize_animal_to_html(animal):
     """
@@ -104,7 +76,7 @@ def main():
     Main function to generate the animals web page.
     """
     animal_name = input("Enter a name of an animal: ")
-    animals_data = get_animal_data(animal_name)
+    animals_data = data_fetcher.fetch_data(animal_name)
 
     if animals_data is not None:
         animal_html = generate_animal_html(animals_data)
