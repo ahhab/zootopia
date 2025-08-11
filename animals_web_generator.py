@@ -1,18 +1,33 @@
 import json
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv() # not to commit the api key, it is stored in .env an loaded here. 
 
 
-def load_data(file_path):
+def get_animal_data(animal_name):
     """
-    Loads data from a JSON file.
+    Fetches animal data from the API Ninjas API.
 
     Args:
-        file_path (str): The path to the JSON file.
+        animal_name (str): The name of the animal to search for.
 
     Returns:
-        dict: The loaded JSON data.
+        list: A list of dictionaries containing animal data, or None if the request fails.
     """
-    with open(file_path, "r") as handle:
-        return json.load(handle)
+    api_key = os.getenv("API_NINJAS_API_KEY")
+    if not api_key:
+        raise ValueError("API key not found. Please set the API_NINJAS_API_KEY environment variable.")
+
+    api_url = f'https://api.api-ninjas.com/v1/animals?name={animal_name}'
+    response = requests.get(api_url, headers={'X-Api-Key': api_key})
+
+    if response.status_code == requests.codes.ok:
+        return response.json()
+    else:
+        print(f"Error: {response.status_code} {response.text}")
+        return None
 
 
 def serialize_animal_to_html(animal):
@@ -26,14 +41,15 @@ def serialize_animal_to_html(animal):
         str: An HTML string representing the animal.
     """
     output = '<li class="cards__item">'
-    output += f"<div class='card__title'>{animal['name']}</div>"
+    output += f"<div class='card__title'>{animal.get('name', 'N/A')}</div>"
     output += "<p class='card__text'>"
-    if 'diet' in animal['characteristics']:
-        output += f"<strong>Diet:</strong> {animal['characteristics']['diet']}<br/>"
-    if 'locations' in animal:
+    characteristics = animal.get('characteristics', {})
+    if 'diet' in characteristics:
+        output += f"<strong>Diet:</strong> {characteristics['diet']}<br/>"
+    if 'locations' in animal and animal['locations']:
         output += f"<strong>Location:</strong> {animal['locations'][0]}<br/>"
-    if 'type' in animal['characteristics']:
-        output += f"<strong>Type:</strong> {animal['characteristics']['type']}<br/>"
+    if 'type' in characteristics:
+        output += f"<strong>Type:</strong> {characteristics['type']}<br/>"
     output += "</p>"
     output += '</li>'
     return output
@@ -49,6 +65,8 @@ def generate_animal_html(animals_data):
     Returns:
         str: An HTML string of all the animals.
     """
+    if not animals_data:
+        return "<h2>No animals found.</h2>"
     output = ""
     for animal in animals_data:
         output += serialize_animal_to_html(animal)
@@ -85,20 +103,15 @@ def main():
     """
     Main function to generate the animals web page.
     """
-    # Load animal data
-    animals_data = load_data('animals_data.json')
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = get_animal_data(animal_name)
 
-    # Generate HTML for animals
-    animal_html = generate_animal_html(animals_data)
-
-    # Load the HTML template
-    html_template = load_template('animals_template.html')
-
-    # Replace the placeholder with the generated animal HTML
-    final_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animal_html)
-
-    # Write the final HTML to the output file
-    write_output('animals_web_output.html', final_html)
+    if animals_data is not None:
+        animal_html = generate_animal_html(animals_data)
+        html_template = load_template('animals_template.html')
+        final_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animal_html)
+        write_output('animals_web_output.html', final_html)
+        print("Website was successfully generated to the file animals_web_output.html.")
 
 
 if __name__ == "__main__":
