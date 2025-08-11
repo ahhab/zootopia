@@ -10,6 +10,9 @@ The script `animals_web_generator.py` prompts the user to enter an animal name. 
 
 This project uses a `.idx/dev.nix` file to define and manage the development environment. This file ensures a consistent and reproducible setup by specifying necessary packages, like `python3`. When the workspace is loaded, the Nix package manager automatically installs these dependencies, creating the correct environment to run the project without manual setup.
 
+### Manual Setup
+If the environment is not dev.nix powered, setup python and run `pip install -r requirements.txt`
+
 ## API Key
 
 To interact with the Animals API, you need an API key from [API Ninjas](https://api-ninjas.com/api/animals).
