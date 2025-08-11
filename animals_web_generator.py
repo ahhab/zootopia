@@ -49,7 +49,10 @@ def generate_animal_html(animals_data):
     Returns:
         str: An HTML string of all the animals.
     """
-    return "".join(serialize_animal_to_html(animal) for animal in animals_data)
+    output = ""
+    for animal in animals_data:
+        output += serialize_animal_to_html(animal)
+    return output
 
 
 def load_template(file_path):
