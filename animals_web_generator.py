@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-load_dotenv() # not to commit the api key, it is stored in .env an loaded here. 
+load_dotenv() # not to commit the api key, it is stored in .env and loaded here. 
 
 
 def get_animal_data(animal_name):
