@@ -1,5 +1,3 @@
-import json
-import os
 import data_fetcher
 
 def serialize_animal_to_html(animal):
